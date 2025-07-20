@@ -49,11 +49,11 @@ install_packages() {
     echo "Installing necessary packages..."
     sleep 1.5
     if [ "$DISTRO" = "debian" ]; then
-        apt install -y sshd
+        apt install -y openssh-server
     elif [ "$DISTRO" = "redhat" ]; then
-        dnf install -y sshd
+        dnf install -y openssh-server
     elif [ "$DISTRO" = "arch" ]; then
-        pacman -S --noconfirm sshd
+        pacman -S --noconfirm openssh-server
     else
         echo "Unsupported distribution for package installation."
     fi
@@ -145,9 +145,8 @@ function init() {
     create_ssh_allowed_users_group
     create_user
     create_ssh_user_config_file
-
     echo "Configuration completed successfully."
 }
 
-init()
+init
 
