@@ -38,6 +38,7 @@ update_system() {
         apt update && apt upgrade -y
     elif [ "$DISTRO" = "redhat" ]; then
         dnf update -y
+        dnf install epel-release
     elif [ "$DISTRO" = "arch" ]; then
         pacman -Syu --noconfirm
     else
