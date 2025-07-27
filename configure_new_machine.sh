@@ -116,15 +116,15 @@ create_user() {
 
     # Create user based on DISTRO variable
     if [ "$DISTRO" = "debian" ] || [ "$DISTRO" = "arch" ]; then
-        sudo useradd -m -s /bin/bash "$newuser" || { echo "Failed to create user $newuser"; return 1; }
-        sudo chpasswd <<< "$newuser:$password" || { echo "Failed to set password for $newuser"; return 1; }
-        sudo usermod -aG sudo,ssh_allowed_users "$newuser" || { echo "Failed to add $newuser to sudo group"; return 1; }
-        sudo echo "$newuser  ALL=(ALL)  NOPASSWD: ALL" >> /etc/sudoers || { echo "Failed to add ansible user to sudoers"; return 1; }
+        useradd -m -s /bin/bash "$newuser" || { echo "Failed to create user $newuser"; return 1; }
+        chpasswd <<< "$newuser:$password" || { echo "Failed to set password for $newuser"; return 1; }
+        usermod -aG sudo,ssh_allowed_users "$newuser" || { echo "Failed to add $newuser to sudo group"; return 1; }
+        echo "$newuser  ALL=(ALL)  NOPASSWD: ALL" >> /etc/sudoers || { echo "Failed to add ansible user to sudoers"; return 1; }
     elif [ "$DISTRO" = "redhat" ]; then
-        sudo useradd -m -s /bin/bash "$newuser" || { echo "Failed to create user $newuser"; return 1; }
-        sudo chpasswd <<< "$newuser:$password" || { echo "Failed to set password for $newuser"; return 1; }
-        sudo usermod -aG wheel,ssh_allowed_users "$newuser" || { echo "Failed to add $newuser to wheel group"; return 1; }
-        sudo echo "$newuser  ALL=(ALL)  NOPASSWD: ALL" >> /etc/sudoers || { echo "Failed to add ansible user to sudoers"; return 1; }
+        useradd -m -s /bin/bash "$newuser" || { echo "Failed to create user $newuser"; return 1; }
+        chpasswd <<< "$newuser:$password" || { echo "Failed to set password for $newuser"; return 1; }
+        usermod -aG wheel,ssh_allowed_users "$newuser" || { echo "Failed to add $newuser to wheel group"; return 1; }
+        echo "$newuser  ALL=(ALL)  NOPASSWD: ALL" >> /etc/sudoers || { echo "Failed to add ansible user to sudoers"; return 1; }
     else
         echo "Unsupported distribution for user creation: $DISTRO"
         return 1
