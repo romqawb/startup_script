@@ -57,11 +57,11 @@ install_packages() {
     echo "Installing necessary packages..."
     sleep 1.5
     if [ "$DISTRO" = "debian" ]; then
-        apt install -y openssh-server
+        apt install -y openssh-server curl
     elif [ "$DISTRO" = "redhat" ]; then
-        dnf install -y openssh-server
+        dnf install -y openssh-server curl
     elif [ "$DISTRO" = "arch" ]; then
-        pacman -S --noconfirm openssh-server
+        pacman -S --noconfirm openssh-server curl
     else
         echo "Unsupported distribution for package installation."
     fi
@@ -146,7 +146,7 @@ create_ssh_user_config_file() {
 inform_ansible() {
     echo "Post machine configuration to ansible server..."
     sleep 1.5
-    curl -X POST -d "$HOSTNAME:$IP_ADDRESS" http://172.16.1.72/post_listener.sh || { echo "Failed to inform Ansible about the new machine"; return 1;}
+    curl -X POST -d "$HOSTNAME:$IP_ADDRESS:$DISTRO" http://172.16.1.72/post_listener.sh || { echo "Failed to inform Ansible about the new machine"; return 1; }
 }
 
 function init() {
