@@ -5,7 +5,12 @@
 
 DISTRO=""
 CREATED_USER=""
+LOG_FILE="/var/log/configure_new_machine.log"
 
+# Redirect stdout and stderr to the log file
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+# Check if the script is run as root
 if [ "$(id -u)" -ne 0 ]; then
     echo "This script must be run as root. Please use 'sudo' or switch to the root user."
     exit 1
