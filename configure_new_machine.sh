@@ -146,11 +146,8 @@ create_ssh_user_config_file() {
 inform_ansible() {
     echo "Post machine configuration to ansible server..."
     sleep 1.5
-    curl -X POST -d "$HOSTNAME:$IP_ADDRESS" http://172.16.1.72/post_listener.sh || { echo "Failed to inform Ansible about the new machine"; return 1;
-
+    curl -X POST -d "$HOSTNAME:$IP_ADDRESS" http://172.16.1.72/post_listener.sh || { echo "Failed to inform Ansible about the new machine"; return 1;}
 }
-
-
 
 function init() {
     check_distro
@@ -161,10 +158,9 @@ function init() {
     create_user
     create_ssh_user_config_file
     echo "Informing Ansible about the new machine..."
-    inform_ansible || { echo "Failed to inform Ansible about the new machine"; return 1; }   
+    inform_ansible   
     sleep 1.5
     echo "Configuration completed successfully." 
 }
 
 init
-
