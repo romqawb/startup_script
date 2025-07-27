@@ -6,6 +6,8 @@
 DISTRO=""
 CREATED_USER=""
 LOG_FILE="/var/log/configure_new_machine.log"
+HOSTNAME=$(hostname)
+IP_ADDRESS=$(hostname -I | awk '{print $1}')
 
 # Redirect stdout and stderr to the log file
 exec > >(tee -a "$LOG_FILE") 2>&1
@@ -139,6 +141,15 @@ create_ssh_user_config_file() {
     touch /etc/ssh/sshd_config.d/ssh_user.conf || { echo "Failed to create SSH user configuration file"; return 1; }
     echo "PermitRootLogin no" >> /etc/ssh/sshd_config.d/ssh_user.conf || { echo "Failed to write to SSH user configuration file"; return 1; }
     echo "AllowGroups ssh_allowed_users" >> /etc/ssh/sshd_config.d/ssh_user.conf || { echo "Failed to write to SSH user configuration file"; return 1; }
+}
+
+inform_ansible() {
+    echo "Post machine configuration tasks..."
+
+    sleep 1.5
+    # Add any additional post-configuration tasks here
+    curl -X POST -d "$HOSTNAME:$IP_ADDRESS" http://172.16.1.72/post_listener.sh || { echo "Failed to inform Ansible about the new machine"; return 1;
+
 }
 
 
